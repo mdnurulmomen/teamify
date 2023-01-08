@@ -8,6 +8,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Player;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PlayerResource;
 use App\Http\Requests\PlayerStoreRequest;
@@ -26,17 +27,29 @@ class PlayerController extends Controller
 
     public function store(PlayerStoreRequest $request)
     {
-        $player = Player::firstOrCreate([
-            'name' => $request->name,
-            'position' => $request->position
-        ]);
+        try {
 
-        foreach ($request->playerSkills as $playerSkill) {
+            DB::beginTransaction();
 
-            $playerAddedSkill = $player->skills()->firstOrCreate([
-                'skill' => $playerSkill['skill'],
-                'value' => $playerSkill['value']
+            $player = Player::firstOrCreate([
+                'name' => $request->name,
+                'position' => $request->position
             ]);
+
+            foreach ($request->playerSkills as $playerSkill) {
+
+                $playerAddedSkill = $player->skills()->firstOrCreate([
+                    'skill' => $playerSkill['skill'],
+                    'value' => $playerSkill['value']
+                ]);
+
+            }
+
+            DB::commit();
+
+        } catch (Throwable $e) {
+
+            DB::rollBack();
 
         }
 
@@ -45,9 +58,41 @@ class PlayerController extends Controller
                ->setStatusCode(201);
     }
 
-    public function update()
+    public function update(PlayerStoreRequest $request, $playerid)
     {
-        return response("Updated", 500);
+        $player = Player::findOrFail($playerid);
+
+        try {
+
+            DB::beginTransaction();
+
+            $player->update([
+                'name' => $request->name,
+                'position' => $request->position
+            ]);
+
+            $player->skills()->delete();
+
+            foreach ($request->playerSkills as $playerSkill) {
+
+                $playerAddedSkill = $player->skills()->create([
+                    'skill' => $playerSkill['skill'],
+                    'value' => $playerSkill['value']
+                ]);
+
+            }
+
+            DB::commit();
+
+        } catch (Throwable $e) {
+
+            DB::rollBack();
+
+        }
+
+        return (new PlayerResource($player->load('skills')))
+               ->response()
+               ->setStatusCode(200);
     }
 
     public function destroy()
