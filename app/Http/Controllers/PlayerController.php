@@ -22,7 +22,7 @@ class PlayerController extends Controller
 
     public function index()
     {
-        return response("Index", 500);
+        return PlayerResource::collection(Player::all());
     }
 
     public function show()
@@ -95,9 +95,7 @@ class PlayerController extends Controller
 
         }
 
-        return (new PlayerResource($player->load('skills')))
-               ->response()
-               ->setStatusCode(200);
+        return new PlayerResource($player->load('skills'));
     }
 
     public function destroy($playerid)
