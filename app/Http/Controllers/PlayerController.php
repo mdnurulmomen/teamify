@@ -9,11 +9,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Player;
 use App\Http\Requests\TeamRequest;
-use App\Http\Resources\TeamResource;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\PlayerRequest;
+use App\Http\Resources\TeamResource;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PlayerResource;
-use App\Http\Requests\PlayerStoreRequest;
 
 
 class PlayerController extends Controller
@@ -35,7 +35,7 @@ class PlayerController extends Controller
         return new PlayerResource($player);
     }
 
-    public function store(PlayerStoreRequest $request)
+    public function store(PlayerRequest $request)
     {
         try {
 
@@ -68,7 +68,7 @@ class PlayerController extends Controller
                ->setStatusCode(201);
     }
 
-    public function update(PlayerStoreRequest $request, $playerid)
+    public function update(PlayerRequest $request, $playerid)
     {
         $player = Player::findOrFail($playerid);
 

@@ -2,13 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\PlayerSkill;
-use App\Enums\PlayerPosition;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Enum;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PlayerStoreRequest extends FormRequest
+class PlayerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
