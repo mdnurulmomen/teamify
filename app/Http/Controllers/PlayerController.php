@@ -8,10 +8,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Player;
+use App\Http\Requests\TeamRequest;
+use App\Http\Resources\TeamResource;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PlayerResource;
 use App\Http\Requests\PlayerStoreRequest;
+
 
 class PlayerController extends Controller
 {
@@ -109,5 +112,29 @@ class PlayerController extends Controller
         $player->delete();
 
         return response()->json(['message' => 'Player has been deleted.'], 200);
+    }
+
+    public function getTeamPlayers(TeamRequest $request)
+    {
+        $players = [];
+
+        foreach ($request->all() as $requirementKey => $requirement) {
+
+            $group = Player::where('position', $requirement['position'])
+            ->whereHas('skills', function ($query) use ($requirement) {
+                $query->where('skill', $requirement['mainSkill']);
+            })
+            ->take($requirement['numberOfPlayers'])
+            ->get();
+
+            foreach ($group as $memberKey => $member) {
+
+                array_push($players, $member);
+
+            }
+
+        }
+
+        return TeamResource::collection($players);
     }
 }

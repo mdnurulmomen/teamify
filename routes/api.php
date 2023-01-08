@@ -33,4 +33,4 @@ Route::group(['prefix'=>'player'], function () {
     Route::delete($idInThePath, [PlayerController::class, 'destroy']);
 });
 
-Route::post('team/process', []);
+Route::post('team/process', [PlayerController::class, 'getTeamPlayers']);
