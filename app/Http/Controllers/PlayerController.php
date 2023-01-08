@@ -15,6 +15,11 @@ use App\Http\Requests\PlayerStoreRequest;
 
 class PlayerController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('verified-token')->only('destroy');
+    }
+
     public function index()
     {
         return response("Index", 500);
@@ -95,8 +100,14 @@ class PlayerController extends Controller
                ->setStatusCode(200);
     }
 
-    public function destroy()
+    public function destroy($playerid)
     {
-        return response("Deleted", 500);
+        $player = Player::findOrFail($playerid);
+
+        $player->skills()->delete();
+
+        $player->delete();
+
+        return response()->json(['message' => 'Player has been deleted.'], 200);
     }
 }
