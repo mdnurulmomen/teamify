@@ -18,7 +18,7 @@ class EnsureTokenIsValid
     {
         if ($request->bearerToken() !== 'SkFabTZibXE1aE14ckpQUUxHc2dnQ2RzdlFRTTM2NFE2cGI4d3RQNjZmdEFITmdBQkE=') {
 
-            return response()->json(['error' => 'Unauthorized request.'], 403);
+            return response()->json(['message' => 'Unauthorized request.'], 403);
 
         }
 

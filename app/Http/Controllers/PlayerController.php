@@ -7,6 +7,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Player;
 use App\Http\Requests\TeamRequest;
 use Illuminate\Support\Facades\DB;
@@ -57,9 +58,14 @@ class PlayerController extends Controller
 
             DB::commit();
 
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
 
             DB::rollBack();
+
+            return response()->json([
+                'message' => $e->getMessage(),
+                // 'code' => $e->getCode(),
+            ], 400);
 
         }
 
@@ -94,9 +100,14 @@ class PlayerController extends Controller
 
             DB::commit();
 
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
 
             DB::rollBack();
+
+            return response()->json([
+                'message' => $e->getMessage(),
+                // 'code' => $e->getCode(),
+            ], 400);
 
         }
 
