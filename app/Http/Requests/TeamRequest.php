@@ -38,4 +38,32 @@ class TeamRequest extends FormRequest
             '*.numberOfPlayers' => 'required|integer|min:1',
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            '*.position' => [
+                'required' => 'Player position field is required',
+                'string' => 'The :attribute should be a string',
+                'in' => 'Player positon is invalid (allowed:defender, midfielder, forward)'
+            ],
+
+            '*.mainSkill' => [
+                'required' => 'The :attribute field is required',
+                'string' => 'The :attribute should be a string',
+                'in' => 'The :attribute is invalid (allowed:defense, attack, speed, strength, stamina)'
+            ],
+
+            '*.numberOfPlayers' => [
+                'required' => 'The :attribute field is required',
+                'integer' => 'The :attribute should be an integer',
+                'min' => 'The minimum value of :attribute is 0',
+            ]
+        ];
+    }
 }
