@@ -9,6 +9,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Player;
+use App\Models\PlayerSkill;
 use App\Http\Requests\TeamRequest;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\PlayerRequest;
@@ -131,16 +132,53 @@ class PlayerController extends Controller
 
         foreach ($request->all() as $requirementKey => $requirement) {
 
-            $group = Player::where('position', $requirement['position'])
+            $group = Player::with('skills')
+            ->where('position', $requirement['position'])
+            ->whereNotIn('id', array_column($players, 'id'))
             ->whereHas('skills', function ($query) use ($requirement) {
                 $query->where('skill', $requirement['mainSkill']);
             })
+            ->orderByDesc(
+                PlayerSkill::select('value')
+                ->whereColumn('player_id', 'players.id')
+                ->orderByDesc('value')
+                ->limit(1)
+            )
             ->take($requirement['numberOfPlayers'])
             ->get();
 
-            foreach ($group as $memberKey => $member) {
+            if ($group->isEmpty() || $group->count() < $requirement['numberOfPlayers']) {
 
-                array_push($players, $member);
+                $group2 = Player::with('skills')
+                ->where('position', $requirement['position'])
+                ->whereNotIn('id', array_column($players, 'id'))
+                ->orderByDesc(
+                    PlayerSkill::select('value')
+                    ->whereColumn('player_id', 'players.id')
+                    ->orderByDesc('value')
+                    ->limit(1)
+                )
+                ->take($requirement['numberOfPlayers'])
+                ->get();
+
+                $group = $group->merge($group2);
+
+            }
+
+            if ($group->count() < $requirement['numberOfPlayers']) {
+
+                return response()->json([
+                    'message' => 'Insufficient number of players for position: '.$requirement['position'],
+                ], 500);
+
+            }
+            else {
+
+                foreach ($group as $memberKey => $member) {
+
+                    array_push($players, $member);
+
+                }
 
             }
 
