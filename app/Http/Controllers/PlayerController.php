@@ -158,7 +158,7 @@ class PlayerController extends Controller
                     ->orderByDesc('value')
                     ->limit(1)
                 )
-                ->take($requirement['numberOfPlayers'])
+                ->take(($requirement['numberOfPlayers'] - $group->count()))
                 ->get();
 
                 $group = $group->merge($group2);
