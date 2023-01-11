@@ -169,7 +169,7 @@ class PlayerController extends Controller
 
                 return response()->json([
                     'message' => 'Insufficient number of players for position: '.$requirement['position'],
-                ], 500);
+                ], 422);
 
             }
             else {

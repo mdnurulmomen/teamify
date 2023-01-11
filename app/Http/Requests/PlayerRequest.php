@@ -43,7 +43,7 @@ class PlayerRequest extends FormRequest
                 Rule::in(['defense', 'attack', 'speed', 'strength', 'stamina']),
             ],
             'playerSkills.*.value' => [
-                'nullable', 'integer', 'min:0'
+                'required', 'integer', 'min:0'
             ],
         ];
     }
@@ -74,6 +74,7 @@ class PlayerRequest extends FormRequest
             // 'playerSkills.*.skill.in' => 'The :attribute is invalid (allowed:defense, attack, speed, strength, stamina)',
             'playerSkills.*.skill.*' => 'Invalid value for :attribute: :input',     // string / in
 
+            'playerSkills.*.value.required' => 'The :attribute field is missing',
             // 'playerSkills.*.value.integer' => 'The :attribute should be an integer',
             // 'playerSkills.*.value.min' => 'The minimum value of :attribute is 0',
             'playerSkills.*.value.*' => 'Invalid value for :attribute: :input',

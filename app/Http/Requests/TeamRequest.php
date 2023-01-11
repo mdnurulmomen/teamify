@@ -54,23 +54,28 @@ class TeamRequest extends FormRequest
     */
     public function withValidator($validator)
     {
-        $validator->after(function ($validator) {
+        if (!$validator->fails()) {
 
-            foreach ($this->all() as $requirementKey => $requirement) {
+            $validator->after(function ($validator) {
 
-                foreach ($this->all() as $requirementNewKey => $requirementNew) {
+                foreach ($this->all() as $requirementKey => $requirement) {
 
-                    if ($requirementKey != $requirementNewKey && $requirement['position'] == $requirementNew['position'] && $requirement['mainSkill'] == $requirementNew['mainSkill']) {
+                    foreach ($this->all() as $requirementNewKey => $requirementNew) {
 
-                        $validator->errors()->add("$requirementNewKey.position", "Duplicate value for position: ".$requirementNew['position']." and mainSkill: ".$requirementNew['mainSkill']);
+                        if ($requirementKey != $requirementNewKey && $requirement['position'] == $requirementNew['position'] && $requirement['mainSkill'] == $requirementNew['mainSkill']) {
+
+                            $validator->errors()->add("$requirementNewKey.position", "Duplicate value for position: ".$requirementNew['position']." and mainSkill: ".$requirementNew['mainSkill']);
+
+                        }
 
                     }
 
                 }
 
-            }
+            });
 
-        });
+        }
+
     }
 
     /**
