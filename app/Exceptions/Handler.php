@@ -9,6 +9,8 @@ namespace App\Exceptions;
 
 use Throwable;
 use Exception;
+use Illuminate\Database\QueryException;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -57,6 +59,18 @@ class Handler extends ExceptionHandler
                     return response()->json([
                         'message' => "Record not found",
                     ], 404);
+
+                } else if ($e instanceof ValidationException) {
+
+                    return response()->json([
+                        'message' => $e->getMessage()
+                    ], 422);
+
+                } else if ($e instanceof QueryException) {
+
+                    return response()->json([
+                        'message' => $e->getMessage()
+                    ], 500);
 
                 } else {
 
