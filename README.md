@@ -5,7 +5,7 @@
 -   Run an instance of terminal (Git bash, PowerShell, windows terminal, etc.) & clone repository with HTTPS
 
 ```bash
-git clone https://github.com/mdnurulmomen/digital-contract.git
+git clone https://github.com/mdnurulmomen/best-team-finder.git
 ```
 
 ### Docker Setup
@@ -15,7 +15,7 @@ _Please install Docker Desktop first. Docker requires high memory to run smoothl
 -   Navigate to project directory and build docker YML file using docker compose
 
 ```bash
-cd digital-contract
+cd best-team-finder
 ```
 
 ```bash
