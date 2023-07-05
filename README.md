@@ -1,3 +1,14 @@
+## Requirements
+
+- PHP >= 8.0
+- Laravel >= 8.0
+- SQLite database
+- Docker
+- Docker-compose
+
+ This challenge does not require any additional library. DO NOT MODIFY the composer.json or composer.lock file as that may result in a test failure.
+ The project already contain a sample SQLite database at /database/database.sqlite. Please don´t change the database structure by creating a seed or migration file because this may also result in a test failure.
+
 ## Installation
 
 ### Project cloning
@@ -95,17 +106,6 @@ _Project setup is complete. You can authenticate and test API’s now._
 ## Server Port
 
 _see docker-compose.local.yml_
-
-## Requirements
-
-- PHP = 8.1
-- Laravel >= 8.0
-- SQLite database
-- Docker
-- Docker-compose
-
- This challenge does not require any additional library. DO NOT MODIFY the composer.json or composer.lock file as that may result in a test failure.
- The project already contain a sample SQLite database at /database/database.sqlite. Please don´t change the database structure by creating a seed or migration file because this may also result in a test failure.
 
 ### Author
 
